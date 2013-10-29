@@ -10,7 +10,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 @Mod(
         modid = "SleepyNight",
         name = "Sleepy Night",
-        version = "1.1.1"
+        version = "@VERSION@"
 )
 @NetworkMod(
         clientSideRequired = true,
