@@ -26,7 +26,7 @@ public class SleepyNight {
     )
     public static CommonProxy proxy;
 
-    @Init
+    @Mod.EventHandler
     public void load(FMLInitializationEvent event) {
         proxy.registerTickHandler();
     }
