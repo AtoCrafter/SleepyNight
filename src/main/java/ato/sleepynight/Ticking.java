@@ -1,18 +1,16 @@
 package ato.sleepynight;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.IScheduledTickHandler;
-import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraft.block.Block;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingEvent;
 
-import java.util.EnumSet;
-
+@SideOnly(Side.CLIENT)
 public class Ticking {
 
     @SubscribeEvent
@@ -20,57 +18,47 @@ public class Ticking {
         if (event.entityLiving instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.entityLiving;
             World world = player.worldObj;
-
-        }
-    }
-
-    @Override
-    public void tickStart(EnumSet<TickType> type, Object... tickData) {
-        if (type.equals(EnumSet.of(TickType.PLAYER))) {
-            Minecraft mc = FMLClientHandler.instance().getClient();
-            EntityPlayer player = mc.thePlayer;
-            World world = mc.theWorld;
-
-            if (player != null && world != null) {
-                int playerX = (int) Math.floor(player.posX);
-                int playerY = (int) Math.floor(player.posY - 1.62);
-                int playerZ = (int) Math.floor(player.posZ);
-
-                long time = world.getWorldTime() % 24000;
-                if (12500 < time && time < 23500) {
-                    for (int dx = -2; dx <= 2; ++dx) {
-                        for (int dy = -2; dy <= 2; ++dy) {
-                            for (int dz = -2; dz <= 2; ++dz) {
-                                int x = playerX + dx;
-                                int y = playerY + dy;
-                                int z = playerZ + dz;
-                                if (world.getBlockId(x, y, z) == Block.bed.blockID) {
-                                    mc.playerController.onPlayerRightClick(player, world, null, x, y, z, 1, Vec3.createVectorHelper(0, 0, 0));
-                                }
-                            }
-                        }
-                    }
-                }
+            long time = world.getWorldTime();
+            if (world.isRemote && time % 100 == 0 && isSleepy(time)) {
+                int[] coord = getNearBedCoord(world, player);
+                if (coord != null)
+                    clickBed(player, world, coord[0], coord[1], coord[2]);
             }
         }
     }
 
-    @Override
-    public void tickEnd(EnumSet<TickType> type, Object... tickData) {
+    /**
+     * 眠い時間かどうか
+     */
+    private boolean isSleepy(long time) {
+        return 12500 < time && time < 23500;
     }
 
-    @Override
-    public EnumSet<TickType> ticks() {
-        return EnumSet.of(TickType.PLAYER);
-    }
+    /**
+     * 近くのベッドの座標を取得
+     */
+    private int[] getNearBedCoord(World world, EntityPlayer player) {
 
-    @Override
-    public String getLabel() {
+        for (int dx = -2; dx <= 2; ++dx) {
+            for (int dy = -2; dy <= 2; ++dy) {
+                for (int dz = -2; dz <= 2; ++dz) {
+                    int x = (int) player.posX + dx;
+                    int y = (int) player.posY + dy;
+                    int z = (int) player.posZ + dz;
+                    if (world.getBlock(x, y, z) == Blocks.bed) {
+                        return new int[]{x, y, z};
+                    }
+                }
+            }
+        }
         return null;
     }
 
-    @Override
-    public int nextTickSpacing() {
-        return 100;
+    /**
+     * ベッドを右クリックする
+     */
+    private void clickBed(EntityPlayer player, World world, int x, int y, int z) {
+        Minecraft.getMinecraft().playerController
+                .onPlayerRightClick(player, world, null, x, y, z, 1, Vec3.createVectorHelper(0, 0, 0));
     }
 }
