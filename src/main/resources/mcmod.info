@@ -3,20 +3,10 @@
   "modid": "SleepyNight",
   "name": "Sleepy Night",
   "description": "Mr. Minecraft is very sleepy at night. He sleeps in a near bed at his discretion.",
-  "version": "1.1.1",
-  "mcversion": "1.4.7",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
   "url": "http://atocrafter.github.com/SleepyNight/",
-  "updateUrl": "",
-  "authors": [
-    "Ato"
-  ],
-  "credits": "",
-  "logoFile": "",
-  "screenshots": [
-  ],
-  "parent":"",
-  "dependencies": [
-    "mod_MinecraftForge"
-  ]
+  "authorList": ["Ato"],
+  "dependencies": []
 }
 ]
