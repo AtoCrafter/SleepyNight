@@ -1,0 +1,12 @@
+[
+{
+  "modid": "SleepyNight",
+  "name": "Sleepy Night",
+  "description": "Mr. Minecraft is very sleepy at night. He sleeps in a near bed at his discretion.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "http://atocrafter.github.com/SleepyNight/",
+  "authorList": ["Ato"],
+  "dependencies": []
+}
+]
