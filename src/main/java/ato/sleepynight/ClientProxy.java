@@ -1,13 +1,12 @@
 package ato.sleepynight;
 
-import cpw.mods.fml.common.registry.TickRegistry;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.common.MinecraftForge;
 
 public class ClientProxy extends CommonProxy {
 
     @Override
     public void registerTickHandler() {
-        TickRegistry.registerScheduledTickHandler(new Ticking(), Side.CLIENT);
+        MinecraftForge.EVENT_BUS.register(new Ticking());
     }
 
 }

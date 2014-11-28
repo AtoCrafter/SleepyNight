@@ -3,15 +3,26 @@ package ato.sleepynight;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.IScheduledTickHandler;
 import cpw.mods.fml.common.TickType;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingEvent;
 
 import java.util.EnumSet;
 
-public class Ticking implements IScheduledTickHandler {
+public class Ticking {
+
+    @SubscribeEvent
+    public void onUpdate(LivingEvent.LivingUpdateEvent event) {
+        if (event.entityLiving instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) event.entityLiving;
+            World world = player.worldObj;
+
+        }
+    }
 
     @Override
     public void tickStart(EnumSet<TickType> type, Object... tickData) {
